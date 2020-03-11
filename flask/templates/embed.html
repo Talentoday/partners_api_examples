@@ -1,0 +1,43 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+  <div class="header">
+    <span>Parent App: User {{ user['id'] }} ({{ user['first_name'] }} {{ user['last_name'] }}) taking the questionnaire</span>
+    <span id="incoming-messages"></span>
+  </div>
+  <iframe id="talentoday_site" src="{{ link }}"></iframe>
+
+  <script type="text/javascript">
+    window.addEventListener("message", receiveMessage, false);
+
+    function showMessage(message) {
+      document.getElementById("incoming-messages").innerHTML = "Message from iframed app: " + message;
+    }
+
+    function receiveMessage(event) {
+      var data = event && event.data;
+      var eventType = data && data.event;
+
+      if (eventType) {
+        switch(eventType) {
+          case "questionnaire_progress":
+            var progressInPercent = data.payload && data.payload.progress;
+            var message = "Progress: " + progressInPercent;
+            console.log(message);
+            showMessage(message);
+            break;
+          case "state_change":
+            var newState = data.payload && data.payload.new_state;
+            var message = "State changed to: " + newState;
+            console.log(message);
+            showMessage(message);
+
+            if (newState === 'wait_after_completion') {
+              console.log("Maybe redirect here")
+            }
+            break;
+        }
+      }
+    }
+  </script>
+{% endblock %}
