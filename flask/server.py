@@ -17,8 +17,6 @@ def embed():
   user = service.create_user()
   link = service.get_embed_link(user)
 
-  print(CONFIG['partners_api']['host'])
-
   return render_template('embed.html', link=link, user=user)
 
 if __name__ == '__main__':
