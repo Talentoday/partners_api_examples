@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, jsonify
 import os
 from talentoday.partners_api import PartnersApi
 
@@ -12,12 +12,31 @@ CONFIG = {
 }
 
 @app.route('/')
-def embed():
+@app.route('/<user_id>')
+def embed(user_id=None):
   service = PartnersApi(CONFIG['partners_api'])
-  user = service.create_user()
-  link = service.get_embed_link(user)
+  user = service.get_user(user_id) if user_id != None else service.create_user()
+  link = service.get_embed_link(user['id'])
 
   return render_template('embed.html', link=link, user=user)
+
+@app.route('/status/<member_id>')
+def status(member_id):
+  service = PartnersApi(CONFIG['partners_api'])
+  status = service.get_status(member_id)
+
+  print(status)
+
+  return jsonify(status)
+
+@app.route('/scores/<member_id>')
+def scores(member_id):
+  service = PartnersApi(CONFIG['partners_api'])
+  scores = service.get_scores(member_id)
+
+  print(scores)
+
+  return jsonify(scores)
 
 if __name__ == '__main__':
    app.run(debug = True)

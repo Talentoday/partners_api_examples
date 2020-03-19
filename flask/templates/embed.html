@@ -35,6 +35,9 @@
             if (newState === 'wait_after_completion') {
               console.log("Maybe redirect here")
             }
+
+            fetch("/status/{{ user['id'] }}")
+            fetch("/scores/{{ user['id'] }}")
             break;
         }
       }
