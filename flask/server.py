@@ -25,16 +25,12 @@ def status(member_id):
   service = PartnersApi(CONFIG['partners_api'])
   status = service.get_status(member_id)
 
-  print(status)
-
   return jsonify(status)
 
 @app.route('/scores/<member_id>')
 def scores(member_id):
   service = PartnersApi(CONFIG['partners_api'])
   scores = service.get_scores(member_id)
-
-  print(scores)
 
   return jsonify(scores)
 
